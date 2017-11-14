@@ -23,6 +23,7 @@ export abstract class Pager extends View {
 
     private _disableSwipe: boolean;
     private _pageSpacing: number = 0;
+    private _direction: string = 'horizontal';
 
     public static selectedIndexChangedEvent = "selectedIndexChanged";
 
@@ -43,6 +44,13 @@ export abstract class Pager extends View {
     }
     set pageSpacing(value: number) {
         this._pageSpacing = value;
+    }
+
+    get direction(): string {
+        return this._direction;
+    }
+    set direction(value: string) {
+        this._direction = value;
     }
 
     public abstract updateNativeItems(oldItems: Array<View>, newItems: Array<View>): void;
