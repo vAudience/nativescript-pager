@@ -106,6 +106,8 @@ export class Pager extends common.Pager {
 
         if (this.direction === 'vertical') {
             this._android.setPageTransformer(true, new TNSDefaultVerticalPageTransformer());
+            // Get rid of the overscroll drawing that happens on the left and right (the ripple)
+            this._android.setOverScrollMode(android.view.View.OVER_SCROLL_NEVER)
         } else {
             if (this.transformer) {
                 this._android.setPageTransformer(false, new this._transformer());
