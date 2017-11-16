@@ -71,7 +71,7 @@ function onItemTemplateChanged(pager: Pager, oldValue, newValue) {
 function onSelectedIndexChanged(pager: Pager, oldValue, newValue) {
     if (pager && pager.items && types.isNumber(newValue)) {
         pager.updateNativeIndex(oldValue, newValue);
-        // pager.notify({ eventName: Pager.selectedIndexChangedEvent, object: pager, oldIndex: oldValue, newIndex: newValue });
+        pager.notify({ eventName: Pager.selectedIndexChangedEvent, object: pager, oldIndex: oldValue, newIndex: newValue });
     }
 }
 
