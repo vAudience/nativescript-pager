@@ -95,6 +95,14 @@ export class Pager extends common.Pager {
                 }
             },
             onPageScrolled: function (position, positionOffset, positionOffsetPixels) {
+                const owner = that.get();
+                if (owner) {
+                    owner._pageScrolledFromNative({
+                        position: position,
+                        positionOffset: positionOffset,
+                        positionOffsetPixels: positionOffsetPixels
+                    });
+                }
             },
             onPageScrollStateChanged: function (state) {
             }
@@ -267,6 +275,14 @@ export class Pager extends common.Pager {
             // this._onPropertyChangedFromNative(common.Pager.selectedIndexProperty, newIndex);
             // this.notify({ eventName: common.Pager.selectedIndexChangedEvent, object: this, oldIndex, newIndex });
         }
+    }
+
+    _pageScrolledFromNative(newPageScrolledEvent: any) {
+        this.notify({
+            eventName: common.Pager.pageScrolledEvent,
+            object: this,
+            value: newPageScrolledEvent
+        });
     }
 }
 

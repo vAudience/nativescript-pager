@@ -26,6 +26,7 @@ export abstract class Pager extends View {
     private _direction: string = 'horizontal';
 
     public static selectedIndexChangedEvent = "selectedIndexChanged";
+    public static pageScrolledEvent = "pageScrolled";
 
     _getData(index: number) {
         let items = <any>this.items;
@@ -71,7 +72,7 @@ function onItemTemplateChanged(pager: Pager, oldValue, newValue) {
 function onSelectedIndexChanged(pager: Pager, oldValue, newValue) {
     if (pager && pager.items && types.isNumber(newValue)) {
         pager.updateNativeIndex(oldValue, newValue);
-        pager.notify({ eventName: Pager.selectedIndexChangedEvent, object: pager, oldIndex: oldValue, newIndex: newValue });
+        // pager.notify({ eventName: Pager.selectedIndexChangedEvent, object: pager, oldIndex: oldValue, newIndex: newValue });
     }
 }
 
