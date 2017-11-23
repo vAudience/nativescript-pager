@@ -190,6 +190,12 @@ export class Pager extends common.Pager {
         super.onUnloaded();
     }
 
+    onLoaded() {
+        this._android.setAdapter(this._pagerAdapter);
+        this._android.setCurrentItem(this.selectedIndex);
+        super.onLoaded();
+    }
+
     public disposeNativeView() {
         this._viewMap.clear();
         super.disposeNativeView();
