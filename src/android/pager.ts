@@ -105,6 +105,10 @@ export class Pager extends common.Pager {
                 }
             },
             onPageScrollStateChanged: function (state) {
+                const owner = that.get();
+                if (owner) {
+                    owner._pageScrollStateChangedFromNative(state);
+                }
             }
         }));
 
@@ -284,11 +288,19 @@ export class Pager extends common.Pager {
         }
     }
 
-    _pageScrolledFromNative(newPageScrolledEvent: any) {
+    _pageScrolledFromNative(newPageScrolledEvent: any): void {
         this.notify({
             eventName: common.Pager.pageScrolledEvent,
             object: this,
             value: newPageScrolledEvent
+        });
+    }
+
+    _pageScrollStateChangedFromNative(state: number): void {
+        this.notify({
+            eventName: common.Pager.pageScrollStateChanged,
+            object: this,
+            value: state
         });
     }
 }

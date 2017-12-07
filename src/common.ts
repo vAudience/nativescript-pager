@@ -28,6 +28,7 @@ export abstract class Pager extends View {
 
     public static selectedIndexChangedEvent = "selectedIndexChanged";
     public static pageScrolledEvent = "pageScrolled";
+    public static pageScrollStateChanged = "pageScrollStateChanged";
 
     _getData(index: number) {
         let items = <any>this.items;
