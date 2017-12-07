@@ -4,6 +4,7 @@ import { View, Property, CoercibleProperty, booleanConverter } from "ui/core/vie
 import * as types from "utils/types";
 
 export const ITEMSLOADING = "itemsLoading";
+export const ITEMSUNLOADING = "itemsUnloading";
 
 export module knownTemplates {
     export const itemTemplate = "itemTemplate";

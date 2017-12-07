@@ -20,6 +20,7 @@ import { isBlank } from "nativescript-angular/lang-facade";
 import { ObservableArray } from "data/observable-array";
 
 export const ITEMSLOADING = "itemsLoading";
+export const ITEMSUNLOADING = "itemsUnloading";
 const NG_VIEW = "_ngViewRef";
 
 registerElement("Pager", () => require("../").Pager);
@@ -65,6 +66,7 @@ export class PagerComponent {
                 private loader: ViewContainerRef) {
         this.pager = el.nativeElement;
         this.pager.on(ITEMSLOADING, this.itemsLoading, this);
+        this.pager.on(ITEMSUNLOADING, this.itemsUnloading, this);
     }
 
     @Input()
@@ -109,6 +111,7 @@ export class PagerComponent {
 
     ngOnDestroy() {
         this.pager.off(ITEMSLOADING, this.itemsLoading, this);
+        this.pager.off(ITEMSUNLOADING, this.itemsUnloading, this);
     }
 
     itemsLoading(args): void {
@@ -119,6 +122,12 @@ export class PagerComponent {
             args.view[NG_VIEW] = viewRef;
             this.setupViewRef(viewRef, data, args.index);
             this.detectChangesOnChild(viewRef, args.index);
+        }
+    }
+
+    itemsUnloading(args): void {
+        if (args.view && args.view[NG_VIEW]) {
+            args.view[NG_VIEW].destroy();
         }
     }
 

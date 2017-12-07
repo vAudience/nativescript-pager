@@ -1,6 +1,7 @@
 import { ElementRef, TemplateRef, IterableDiffers, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 import { View } from "ui/core/view";
 export declare const ITEMSLOADING = "itemsLoading";
+export declare const ITEMSUNLOADING = "itemsUnloading";
 export interface ComponentView {
     rootNodes: Array<any>;
     destroy(): void;
@@ -28,6 +29,7 @@ export declare class PagerComponent {
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     itemsLoading(args: any): void;
+    itemsUnloading(args: any): void;
     setupViewRef(viewRef: any, data: any, index: any): void;
     detectChangesOnChild(viewRef: any, index: any): void;
     ngDoCheck(): void;

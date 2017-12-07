@@ -19,6 +19,10 @@ declare namespace com.eftimoff {
     export var viewpagertransformers: any;
 }
 
+declare namespace me.kaelaela {
+    export var verticalviewpager: any;
+}
+
 export class Pager extends common.Pager {
     // Make TypeScript happy
     public pagesCount: number;
@@ -71,11 +75,7 @@ export class Pager extends common.Pager {
     public createNativeView(): android.support.v4.view.ViewPager {
         const that = new WeakRef(this);
         if (this.direction === 'vertical') {
-            if (this.disableSwipe) {
-                this._android = new TNSVerticalViewPager(app.android.context, true);
-            } else {
-                this._android = new TNSVerticalViewPager(app.android.context);
-            }
+            this._android = new me.kaelaela.verticalviewpager.VerticalViewPager(this._context);
         } else {
             if (this.disableSwipe) {
                 this._android = new TNSViewPager(app.android.context, true); //new android.support.v4.view.ViewPager(this._context);
@@ -113,7 +113,8 @@ export class Pager extends common.Pager {
         this._android.setAdapter(this._pagerAdapter);
 
         if (this.direction === 'vertical') {
-            this._android.setPageTransformer(true, new TNSDefaultVerticalPageTransformer());
+            this._android.setPageTransformer(true, new me.kaelaela.verticalviewpager.transforms.StackTransformer());
+
             // Get rid of the overscroll drawing that happens on the left and right (the ripple)
             this._android.setOverScrollMode(android.view.View.OVER_SCROLL_NEVER)
         } else {
@@ -320,10 +321,10 @@ export class PagerAdapter extends android.support.v4.view.PagerAdapter {
                 collection.addView(convertView);
                 return convertView;
             }
-
         }
+
         let view: any = !types.isNullOrUndefined(this.owner.itemTemplate) ? parse(this.owner.itemTemplate, this.owner) : null;
-        let _args: any = notifyForItemAtIndex(this.owner, view ? view.nativeView : null, view, common.ITEMSLOADING, position)
+        let _args: any = notifyForItemAtIndex(this.owner, view ? view.nativeView : null, view, common.ITEMSLOADING, position);
         view = view || _args.view;
         if (view) {
             view.bindingContext = fromObject(this.owner._getData(position));
@@ -343,6 +344,13 @@ export class PagerAdapter extends android.support.v4.view.PagerAdapter {
             if (convertView && convertView.nativeView) {
                 collection.removeView(convertView.nativeView);
                 this.owner._viewMap.delete(position);
+
+                // notify items unloading
+                this.owner.notify({
+                    eventName: common.ITEMSUNLOADING,
+                    object: this.owner,
+                    view: convertView,
+                });
             }
         }
     }
@@ -381,80 +389,6 @@ export class TNSViewPager extends android.support.v4.view.ViewPager {
         }
         else {
             return super.onTouchEvent(ev);
-        }
-    }
-}
-
-
-export class TNSVerticalViewPager extends android.support.v4.view.ViewPager {
-    disableSwipe: boolean;
-
-    constructor(context, disableSwipe?: boolean) {
-        super(context);
-        if (disableSwipe) {
-            this.disableSwipe = disableSwipe;
-        }
-        return global.__native(this);
-    }
-
-    private swapTouchEvent(ev: android.view.MotionEvent): android.view.MotionEvent {
-        let width = this.getWidth();
-        let height = this.getHeight();
-
-        let swappedX = (ev.getY() / height) * width;
-        let swappedY = (ev.getX() / width) * height;
-
-        ev.setLocation(swappedX, swappedY);
-
-        return ev;
-    }
-
-    onInterceptTouchEvent(ev) {
-        if (this.disableSwipe) {
-            return false;
-        } else {
-            let intercept = super.onInterceptTouchEvent(this.swapTouchEvent(ev));
-            //If not intercept, touch event should not be swapped.
-            this.swapTouchEvent(ev);
-            return intercept;
-        }
-    }
-
-    onTouchEvent(ev) {
-        if (this.disableSwipe) {
-            return false;
-        }
-        else {
-            return super.onTouchEvent(this.swapTouchEvent(ev));
-        }
-    }
-}
-
-@Interfaces([android.support.v4.view.ViewPager.PageTransformer])
-export class TNSDefaultVerticalPageTransformer extends java.lang.Object {
-    constructor() {
-        super();
-        return global.__native(this);
-    }
-
-    transformPage(view: android.view.View, position: number): void {
-        if (position < -1) { // [-Infinity,-1)
-            // This page is way off-screen to the left.
-            view.setAlpha(0);
-
-        } else if (position <= 1) { // [-1,1]
-            view.setAlpha(1);
-
-            // Counteract the default slide transition
-            view.setTranslationX(view.getWidth() * -position);
-
-            //set Y position to swipe in from top
-            let yPosition = position * view.getHeight();
-            view.setTranslationY(yPosition);
-
-        } else { // (1,+Infinity]
-            // This page is way off-screen to the right.
-            view.setAlpha(0);
         }
     }
 }

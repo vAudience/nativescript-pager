@@ -9,4 +9,5 @@ android {
 dependencies {
     compile "com.android.support:support-v4:25.0.0"
     compile 'com.eftimoff:android-viewpager-transformers:1.0.1@aar'
+	compile 'me.kaelaela:verticalviewpager:1.0.0@aar'
 }
