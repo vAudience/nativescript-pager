@@ -161,6 +161,18 @@ export class PagerComponent {
             }
         }
     }
+
+    on(eventNames: any, callback: any, thisArg?: any): void {
+        if (this.pager) {
+            this.pager.on(eventNames, callback, thisArg);
+        }
+    }
+
+    off(eventNames: any, callback?: any, thisArg?: any): void {
+        if (this.pager) {
+            this.pager.off(eventNames, callback, thisArg);
+        }
+    }
 }
 
 export class PagerItemContext {

@@ -33,6 +33,8 @@ export declare class PagerComponent {
     setupViewRef(viewRef: any, data: any, index: any): void;
     detectChangesOnChild(viewRef: any, index: any): void;
     ngDoCheck(): void;
+    on(eventNames: any, callback: any, thisArg?: any): void;
+    off(eventNames: any, callback?: any, thisArg?: any): void;
 }
 export declare class PagerItemContext {
     $implicit: any;
